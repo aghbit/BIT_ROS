@@ -17,5 +17,10 @@ Aby oszczędzić czas potrzebny na instalację i konfigurowanie ROS'owego środo
 Praca z ROS'em łączy ze sobą wiedzę z różnych obszarów informatyki i programowania. Przyswajanie nowych informacji będzie efektywniejsze jeśli posiadamy postawową wiedzę na powyższe tematy.
 
 ## Przydatne linki
+
 - [Strona ROS'a](https://www.ros.org/)
 - [Strona BIT'u](https://knbit.edu.pl/)
+
+## Zajęcia
+
+- [Lab 1 - Filozofia ROS'a i podstawowe koncepty](/lab1/README.md)
