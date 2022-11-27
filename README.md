@@ -12,7 +12,7 @@ Aby oszczędzić czas potrzebny na instalację i konfigurowanie ROS'owego środo
 ## Co warto wiedzieć przed?
 
 - Podstawowa składnia [Pythona 3](https://docs.python.org/3/tutorial/).
-- Podstawowe polecenia linuxowe (`cd`, `ls`, `mkdir`, `chmod`, `source` itp.).
+- Podstawowe polecenia unixowe (`cd`, `ls`, `mkdir`, `chmod`, `source` itp.).
 
 Praca z ROS'em łączy ze sobą wiedzę z różnych obszarów informatyki i programowania. Przyswajanie nowych informacji będzie efektywniejsze jeśli posiadamy postawową wiedzę na powyższe tematy.
 
