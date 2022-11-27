@@ -4,7 +4,7 @@ Filozofia ROS'a i podstawowe koncepty
 
 ## Slajdy z prezentacji
 
-[Do pobrania tutaj.]()
+[Do pobrania tutaj.](https://github.com/aghbit/BIT_ROS/raw/main/lab1/slides.pdf)
 
 ## Środowisko
 
