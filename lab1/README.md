@@ -29,7 +29,6 @@ Nowy pusty ROSject na platformie [The Construct](https://www.theconstructsim.com
 - [Package](http://wiki.ros.org/Packages)
   - [roscd](http://wiki.ros.org/rosbash#roscd)
 - [Node](http://wiki.ros.org/Nodes)
-
   - [rosnode](http://wiki.ros.org/rosnode)
   - example node
 
@@ -43,16 +42,12 @@ Nowy pusty ROSject na platformie [The Construct](https://www.theconstructsim.com
         # . . .
         r.sleep()
     ```
-
   - [rospy.Rate(hz) vs rospy.sleep(duration)](http://wiki.ros.org/rospy/Overview/Time)
-
 - [Master](http://wiki.ros.org/Master)
 - [Topic](http://wiki.ros.org/Topics)
-
   - [Message](https://wiki.ros.org/Messages)
   - [rostopic](http://wiki.ros.org/rostopic)
   - example publisher
-
     ```py
       #!/usr/bin/env python3
       import rospy
@@ -65,9 +60,7 @@ Nowy pusty ROSject na platformie [The Construct](https://www.theconstructsim.com
         publisher.publish("Hello World")
         r.sleep()
     ```
-
   - example subscriber
-
     ```py
       #!/usr/bin/env python3
       import rospy
