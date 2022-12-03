@@ -1,11 +1,14 @@
 # Lab 2
 
-## Spis treści
-
-1. Przygotowanie środowiska
-2. Topics
-3. Services
-4. Actions
+- [Lab 2](#lab-2)
+  - [The Construct](#the-construct)
+  - [Workspace](#workspace)
+  - [Package](#package)
+  - [Nodes](#nodes)
+  - [Topics](#topics)
+  - [Services](#services)
+  - [Actions](#actions)
+  - [Źródła](#źródła)
 
 ## The Construct
 
@@ -21,7 +24,7 @@ Tworzymy nowy pusty ROSject na platformie [The Construct](https://www.theconstru
 
 **Uwaga:** Przed uruchomieniem catkina, musimy mieć zainicjalizowane środowisko ROSowe w nasym terminalu za pomocą `source /opt/ros/noetic/setup.bash`. The Construct robi to za nas. Jeśli mamy ROSa na własnym komputerze, możemy dodać tą linię do `.bashrc`.
 
-**Źródło:** [Creating a workspace for catkin.](http://wiki.ros.org/catkin/Tutorials/create_a_workspace)
+**Czytaj więcej:** [Creating a workspace for catkin.](http://wiki.ros.org/catkin/Tutorials/create_a_workspace)
 
 ## Package
 
@@ -83,11 +86,13 @@ Node, czyli po prostu program, który jest widziany przez ROSa i może korzysta�
 
 **Uwaga:** Żeby node mógł poprawnie działać, w tle musi zostać uruchomiony _master_ za pomocą polecania `roscore`. The Construct robi to za nas i od razu działa on w tle.
 
+**Czytaj więcej:** [ROS Nodes](http://wiki.ros.org/Nodes).
+
 ## Topics
 
 <img src="https://docs.ros.org/en/foxy/_images/Topic-SinglePublisherandSingleSubscriber.gif" width=500/>
 
-Topic, czyli sposób na przekazywanie wiadomości danego typu pomiędzy nodeami.
+Topic, czyli sposób na przekazywanie wiadomości danego typu pomiędzy nodeami. **Najczęściej wykorzystywane są do komunikacji w jedną stronę, szczególnie jeśli chcemy żeby wiele nodeów słuchało wiadomości (np. podczas strumieni danych z sensorów).**
 
 Na [Lab 1]() napisaliśmy już dwa nodey, jeden subskrybujący topic, a drugi publikujący na niego.
 
@@ -164,7 +169,7 @@ Na [Lab 1]() napisaliśmy już dwa nodey, jeden subskrybujący topic, a drugi pu
 
 8. Aby publikować wiadomości na topic używamy:
    ```sh
-   rostopic pub /hello_world "{data: 'hello world'}"
+   rostopic pub /hello_world std_msgs/String "data: 'hello world'"
    ```
 9. Listę dostępnych wiadomości sprawdzić możemy poleceniem:
 
@@ -180,9 +185,13 @@ Na [Lab 1]() napisaliśmy już dwa nodey, jeden subskrybujący topic, a drugi pu
 
 **Uwaga:** Tworzenie własnych wiadmości nie zostało opisane na zajęciach, ale jest bardzo zbliżone do tworzenia serwisów. [Więcej informacji tutaj](http://wiki.ros.org/ROS/Tutorials/CreatingMsgAndSrv).
 
+**Czytaj więcej:** [Creating a ROS msg and srv](http://wiki.ros.org/ROS/Tutorials/CreatingMsgAndSrv), [Writing a Simple Publisher and Subscriber Python](http://wiki.ros.org/ROS/Tutorials/WritingPublisherSubscriber%28python%29).
+
 ## Services
 
 <img src="https://docs.ros.org/en/foxy/_images/Service-SingleServiceClient.gif" width=500/>
+
+**Serwisy najczęściej wykorzystywane są do prostych interakcji składających się z zapytania i odpowiedzi (np. zapytanie o aktualny stan nodea, poproszenie o zmianę stanu nodea).**
 
 1. Tworzymy plik definiujący nowy serwis, umieścimy go w `catkin_ws/src/basics/srv` i nazwiemy `WordCount.srv`:
    ```py
@@ -286,11 +295,17 @@ Na [Lab 1]() napisaliśmy już dwa nodey, jeden subskrybujący topic, a drugi pu
 
 - `rosrun ...` - uruchamia node
 - `rosservice list` - wypisuje wszystkie działające serwisy
-- `rosservice call ...` - wywołuje serwis
+- `rosservice call ...` - wywołuje serwis (np. `rosservice call /word_count "words: 'bit ros'"`)
 
 możemy testować nasze programy.
 
+**Czytaj więcej:** [Creating a ROS msg and srv](http://wiki.ros.org/ROS/Tutorials/CreatingMsgAndSrv), [Writing a Simple Service and Client (Python)](http://wiki.ros.org/ROS/Tutorials/WritingServiceClient%28python%29).
+
 ## Actions
+
+**Akcje wykorzystywane są do bardziej złożonych interakcji.** Mamy możliwość zadania goala, otrzymywania cyklicznego feedbacku, przerwania wykonywania goala. Po zakończeniu akcji otrzymujemy response. Wykonywanie akcji dzieli się na etapy, które odpowiadają swoim statusą (`actionlib_msgs/GoalStatusArray`).
+
+Poniżej przygotujemy bardzo prosty serwer i klient akcji. Nie skorzystamy ze wszystkich dobrodziejstw tego interfejsu.
 
 1. Tworzymy plik definiujący nową akcję, umieścimy go w `catkin_ws/src/basics/actions` i nazwiemy `Timer.action`:
    ```py
@@ -399,9 +414,10 @@ możemy testować nasze programy.
 
    **Uwaga:** Akcje są zbudwane na topicach, więc dlatego korzystamy z `rostopic`.
 
+**Czytaj więcej:** [actionlib](http://wiki.ros.org/actionlib)
+
 ## Źródła
 
 - [Ładne diagramy](https://docs.ros.org/en/foxy/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Topics/Understanding-ROS2-Topics.html)
 - [ROS Wiki](http://wiki.ros.org/Documentation)
 - [Programming Robots with ROS, O'Reilly Media](https://www.oreilly.com/library/view/programming-robots-with/9781449325480/) - książka dotyczy starszej wersji ROSa.
-- ...
