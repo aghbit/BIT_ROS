@@ -303,7 +303,7 @@ możemy testować nasze programy.
 
 ## Actions
 
-**Akcje wykorzystywane są do bardziej złożonych interakcji.** Mamy możliwość zadania goala, otrzymywania cyklicznego feedbacku, przerwania wykonywania goala. Po zakończeniu akcji otrzymujemy response. Wykonywanie akcji dzieli się na etapy, które odpowiadają swoim statusą (`actionlib_msgs/GoalStatusArray`).
+**Akcje wykorzystywane są do bardziej złożonych interakcji.** Mamy możliwość zadania goala, otrzymywania cyklicznego feedbacku, przerwania wykonywania goala. Po zakończeniu akcji otrzymujemy response. Wykonywanie akcji dzieli się na etapy, które odpowiadają swoim statusom (`actionlib_msgs/GoalStatusArray`).
 
 Poniżej przygotujemy bardzo prosty serwer i klient akcji. Nie skorzystamy ze wszystkich dobrodziejstw tego interfejsu.
 
