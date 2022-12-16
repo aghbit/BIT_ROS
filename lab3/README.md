@@ -17,6 +17,7 @@
     - [4. Przygotowanie do symulacji w Gazebo](#4-przygotowanie-do-symulacji-w-gazebo)
       - [Kolizje](#kolizje)
       - [Momenty bezwładności](#momenty-bezwładności)
+    - [differential\_drive\_controller](#differential_drive_controller)
   - [roslaunch](#roslaunch-1)
   - [teleop\_twist\_keyboard](#teleop_twist_keyboard)
 
@@ -202,94 +203,106 @@ urdf_to_graphiz tortoisebot.urdf
 
 1. Dodajemy link połaczony joint'em z base_link'iem. Kod wrzucamy tak, aby był dzieckiem `<robot> ... </robot>`
 
-```xml
-<link name="front_caster">
-  <visual>
-    <geometry>
-      <box size="0.1 0.1 0.3"/>
-    </geometry>
-    <material name="silver"/>
-  </visual>
-</link>
+   ```xml
+   <link name="front_caster">
+     <visual>
+       <geometry>
+         <box size="0.1 0.1 0.3"/>
+       </geometry>
+       <material name="silver"/>
+     </visual>
+   </link>
 
-<joint name="front_caster_joint" type="continuous">
-  <axis xyz="0 0 1"/>
-  <parent link="base_link"/>
-  <child link="front_caster"/>
-  <origin rpy="0 0 0" xyz="0.3 0 0"/>
-</joint>
-```
+   <joint name="front_caster_joint" type="continuous">
+     <axis xyz="0 0 1"/>
+     <parent link="base_link"/>
+     <child link="front_caster"/>
+     <origin rpy="0 0 0" xyz="0.3 0 0"/>
+   </joint>
+   ```
 
-2. Sprawdzamy w RViz'ie czy wszystko działa:
+2. Dodajemy przednie koło:
+
+   ```xml
+   <link name="front_wheel">
+     <visual>
+       <geometry>
+         <cylinder length="0.05" radius="0.035"/>
+       </geometry>
+       <material name="black"/>
+     </visual>
+     <collision>
+       <geometry>
+         <cylinder length="0.05" radius="0.035"/>
+       </geometry>
+     </collision>
+     <inertial>
+       <mass value="0.1"/>
+       <inertia ixx="5.1458e-5" iyy="5.1458e-5" izz="6.125e-5"
+               ixy="0" ixz="0" iyz="0"/>
+     </inertial>
+   </link>
+
+   <joint name="front_wheel_joint" type="continuous">
+     <axis xyz="0 0 1"/>
+     <parent link="front_caster"/>
+     <child link="front_wheel"/>
+     <origin rpy="-1.5708 0 0" xyz="0.05 0 -.15"/>
+   </joint>
+   ```
+
+3. Sprawdzamy w RViz'ie czy wszystko działa:
 
    ```sh
    roslaunch urdf_tutorial display.launch model:=tortoisebot.urdf
    ```
 
-3. Dodając argument `gui:=True` możemy wyświetlić okienko pozwalające nam ręcznie ruszać join'ami:
+4. Dodając argument `gui:=True` możemy wyświetlić okienko pozwalające nam ręcznie ruszać join'ami:
    ```sh
    roslaunch urdf_tutorial display.launch model:=tortoisebot.urdf gui:=True
    ```
 
 ### 3. Tylne koła
 
-1. Dodajemy link'i i join'y do tylnych kół w taki sposób, aby były dziećmi `<robot> ... </robot>`.
+3. Dodajemy link'i i join'y do tylnych kół w taki sposób, aby były dziećmi `<robot> ... </robot>`.
 
-```xml
-<link name="front_wheel">
-  <visual>
-    <geometry>
-      <cylinder length="0.05" radius="0.035"/>
-    </geometry>
-    <material name="black"/>
-  </visual>
-</link>
+   ```xml
+   <link name="right_wheel">
+     <visual>
+       <geometry>
+         <cylinder length="0.05" radius="0.035"/>
+       </geometry>
+       <material name="black">
+         <color rgba="0 0 0 1"/>
+       </material>
+     </visual>
+   </link>
 
-<joint name="front_wheel_joint" type="continuous">
-  <axis xyz="0 0 1"/>
-  <parent link="front_caster"/>
-  <child link="front_wheel"/>
-  <origin rpy="-1.5708 0 0" xyz="0.05 0 -.15"/>
-</joint>
-```
+   <joint name="right_wheel_joint" type="continuous">
+     <axis xyz="0 0 1"/>
+     <parent link="base_link"/>
+     <child link="right_wheel"/>
+     <origin rpy="-1.5708 0 0" xyz="-0.2825 -0.125 -.15"/>
+   </joint>
 
-```xml
-<link name="right_wheel">
-  <visual>
-    <geometry>
-      <cylinder length="0.05" radius="0.035"/>
-    </geometry>
-    <material name="black">
-      <color rgba="0 0 0 1"/>
-    </material>
-  </visual>
-</link>
+   <link name="left_wheel">
+     <visual>
+       <geometry>
+         <cylinder length="0.05" radius="0.035"/>
+       </geometry>
+         <material name="black"/>
+       </visual>
+   </link>
 
-<joint name="right_wheel_joint" type="continuous">
-  <axis xyz="0 0 1"/>
-  <parent link="base_link"/>
-  <child link="right_wheel"/>
-  <origin rpy="-1.5708 0 0" xyz="-0.2825 -0.125 -.15"/>
-</joint>
+   <joint name="left_wheel_joint" type="continuous">
+     <axis xyz="0 0 1"/>
+     <parent link="base_link"/>
+     <child link="left_wheel"/>
+     <origin rpy="-1.5708 0 0" xyz="-0.2825 0.125 -.15"/>
+   </joint>
+   ```
 
-<link name="left_wheel">
-  <visual>
-    <geometry>
-      <cylinder length="0.05" radius="0.035"/>
-    </geometry>
-      <material name="black"/>
-    </visual>
-</link>
-
-<joint name="left_wheel_joint" type="continuous">
-  <axis xyz="0 0 1"/>
-  <parent link="base_link"/>
-  <child link="left_wheel"/>
-  <origin rpy="-1.5708 0 0" xyz="-0.2825 0.125 -.15"/>
-</joint>
-```
-
-2. Weryfikujamy czy wszystko ok:
+1. Weryfikujamy czy wszystko ok:
 
    ```sh
    roslaunch urdf_tutorial display.launch model:=tortoisebot.urdf gui:=True
@@ -339,6 +352,24 @@ Tag `<inertial>` definiuje moment bezwładności bryły dla obliczeń symulacji 
              ixy="0" ixz="0" iyz="0"/>
    </inertial>
    ```
+
+### differential_drive_controller
+
+Dodajemy `differential_drive_controller` plugin Gazebo, pozwalający na niskopoziomowe sterowanie kołami naszego robota. Gazebo zajmie się tłumaczeniem komend prędkości publikowanych na topic `/cmd_vel` na ruch robota.
+
+```xml
+<gazebo>
+  <plugin name="differential_drive_controller"
+          filename="libgazebo_ros_diff_drive.so">
+    <leftJoint>left_wheel_joint</leftJoint>
+    <rightJoint>right_wheel_joint</rightJoint>
+    <robotBaseFrame>base_link</robotBaseFrame>
+    <wheelSeparation>0.25</wheelSeparation>
+    <wheelDiameter>0.07</wheelDiameter>
+    <publishWheelJointState>true</publishWheelJointState>
+  </plugin>
+</gazebo>
+```
 
 ## roslaunch
 
