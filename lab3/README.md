@@ -2,6 +2,8 @@
 
 - [Lab](#lab)
   - [TortoiseBot](#tortoisebot)
+    - [Oczekiwania](#oczekiwania)
+    - [Rzeczywistość](#rzeczywistość)
   - [The Construct](#the-construct)
   - [Workspace](#workspace)
   - [Package](#package)
@@ -23,13 +25,25 @@
 
 ## TortoiseBot
 
+### Oczekiwania
+
+Czyli prawdziwy i ładny model robota.
+
 <img width=400 src="https://rigbetellabs.com/wp-content/uploads/2021/07/tortoisebot_actual-v25-1.png" />
+
+### Rzeczywistość
+
+Czyli prosty przykład edukacyjny z dwoma tylnymi napętami i obrotowym pasywnym kołem z przodu.
+
+<img width=600 src="tortoisebot_rviz.png" />
 
 ## The Construct
 
 Tworzymy nowy pusty ROSject na platformie [The Construct](https://www.theconstructsim.com/), wersja ROS Noetic.
 
 ## Workspace
+
+**Kompletny workspace z zajęć znajduje się w katalogu tortoisebot_ws.**
 
 Tworzymy nowy workspace lub korzystamy z obecnie dostępnego (np. `catkin_ws`):
 
@@ -41,7 +55,7 @@ catkin_make
 
 ## Package
 
-Tworzymy nową paczkę `tortoisebot` w naszym workspace:
+**Wszystkie paczki w naszym projekcie powinny znajdować się w katalogu `<nazwa workspace'a>/src/...`.** Tworzymy nową paczkę `tortoisebot`:
 
 ```sh
 catkin_create_pkg tortoisebot rospy std_msgs actionlib_msgs message_generation
@@ -164,7 +178,7 @@ Podczas pracy nad naszym robotem będziemy wykorzystywać standardowe message:
   - `<link>` - Bryła sztywna.
   - `<joint>` - Łączy dwa link'i ze sobą, definuje rodzaj ruchu między nimi.
 
-1. W paczce `tortoisebot` tworzymy katalog `urdf`.
+1. W paczce `tortoisebot` tworzymy katalog `urdf` (obok katalogu `src`).
 2. Tworzymy w nim nowy plik `tortoisebot.urdf`.
 
 ### 1. base_link
@@ -201,7 +215,7 @@ urdf_to_graphiz tortoisebot.urdf
 
 ### 2. Przednie koło
 
-1. Dodajemy link połaczony joint'em z base_link'iem. Kod wrzucamy tak, aby był dzieckiem `<robot> ... </robot>`
+1. Dodajemy link połaczony joint'em z base_link'iem. Kod wrzucamy tak, aby był dzieckiem `<robot> ... </robot>`, (`type="continuous"` definiuje w jaki sposób linki mogą się ruszać względem siebie, dostępnych jest oczywiście więcej typów):
 
    ```xml
    <link name="front_caster">
@@ -231,16 +245,6 @@ urdf_to_graphiz tortoisebot.urdf
        </geometry>
        <material name="black"/>
      </visual>
-     <collision>
-       <geometry>
-         <cylinder length="0.05" radius="0.035"/>
-       </geometry>
-     </collision>
-     <inertial>
-       <mass value="0.1"/>
-       <inertia ixx="5.1458e-5" iyy="5.1458e-5" izz="6.125e-5"
-               ixy="0" ixz="0" iyz="0"/>
-     </inertial>
    </link>
 
    <joint name="front_wheel_joint" type="continuous">
@@ -291,7 +295,7 @@ urdf_to_graphiz tortoisebot.urdf
          <cylinder length="0.05" radius="0.035"/>
        </geometry>
          <material name="black"/>
-       </visual>
+     </visual>
    </link>
 
    <joint name="left_wheel_joint" type="continuous">
@@ -315,6 +319,7 @@ urdf_to_graphiz tortoisebot.urdf
 Tag `<collision>` - rozmiar i kształt bryły dla wykrywanie kolizji w symulacji. Nie musi być tożsamy z `<visual>`.
 
 1. Dodajemy kolizję dla `base_link` bazując na tagu `<visual>`.
+
    ```xml
     <collision>
       <geometry>
@@ -322,7 +327,54 @@ Tag `<collision>` - rozmiar i kształt bryły dla wykrywanie kolizji w symulacji
       </geometry>
     </collision>
    ```
-2. Na podstawie tagów `<visual>` definiujemy kolizje dla wszystkich 3 kół.
+
+   ostatecznie `base_link` powinien wyglądać tak:
+
+   ```xml
+   <link name="base_link">
+     <visual>
+       <geometry>
+         <box size="0.6 0.3 0.3"/>
+       </geometry>
+       <material name="silver">
+         <color rgba="0.75 0.75 0.75 1"/>
+       </material>
+     </visual>
+     <collision>
+       <geometry>
+         <box size="0.6 0.3 0.3"/>
+       </geometry>
+     </collision>
+   </link>
+   ```
+
+1. Dodajemy kolizję dla caster'a:
+
+```xml
+ <collision>
+   <geometry>
+     <box size="0.1 0.1 0.3"/>
+   </geometry>
+ </collision>
+```
+
+2. Na podstawie tagów `<visual>` definiujemy kolizje dla wszystkich 3 kół:
+   - koło przednie:
+     ```xml
+       <collision>
+         <geometry>
+           <cylinder length="0.05" radius="0.035"/>
+         </geometry>
+       </collision>
+     ```
+   - koło lewe i prawe:
+     ```xml
+     <collision>
+       <geometry>
+         <cylinder length="0.05" radius="0.035"/>
+       </geometry>
+     </collision>
+     ```
 
 #### Momenty bezwładności
 
@@ -336,15 +388,23 @@ Tag `<inertial>` definiuje moment bezwładności bryły dla obliczeń symulacji 
              ixy="0" ixz="0" iyz="0"/>
    </inertial>
    ```
-2. Koło przednie:
+2. caster:
    ```xml
-   <inertial>
-     <mass value="0.1"/>
-     <inertia ixx="0.00083" iyy="0.00083" izz="0.000167"
-             ixy="0" ixz="0" iyz="0"/>
-   </inertial>
+    <inertial>
+      <mass value="0.1"/>
+      <inertia ixx="0.00083" iyy="0.00083" izz="0.000167"
+              ixy="0" ixz="0" iyz="0"/>
+    </inertial>
    ```
-3. Koła tylne:
+3. koło przednie:
+   ```xml
+    <inertial>
+      <mass value="0.1"/>
+      <inertia ixx="5.1458e-5" iyy="5.1458e-5" izz="6.125e-5"
+              ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+   ```
+4. koła tylne:
    ```xml
    <inertial>
      <mass value="0.1"/>
@@ -352,6 +412,14 @@ Tag `<inertial>` definiuje moment bezwładności bryły dla obliczeń symulacji 
              ixy="0" ixz="0" iyz="0"/>
    </inertial>
    ```
+
+Możemy ponownie wygenerować graf relacji pomiędzy link'ami i join'ami URDF'a:
+
+```sh
+urdf_to_graphiz tortoisebot.urdf
+```
+
+<img src="tortoisebot_urdf.png">
 
 ### differential_drive_controller
 
@@ -400,6 +468,6 @@ Dodajemy `differential_drive_controller` plugin Gazebo, pozwalający na niskopoz
 
 1. Aby sterować robotem możemy publikować na topic `/cmd_vel` wiadomości `geometry_msgs/Twist`.
 2. Możemy skorzystać z dobrodziejstw paczki `teleop_twist_keyboard`, która implementuje sterowanie robotem za pomocą klawiatury. Node zbiera input od użytkownika i również publikuje na `/cmd_vel`:
-   ```
+   ```sh
    rosrun teleop_twist_keyboard teleop_twist_keyboard.py
    ```

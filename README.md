@@ -25,6 +25,7 @@ Praca z ROS'em łączy ze sobą wiedzę z różnych obszarów informatyki i pro
 
 - [Lab 1 - Filozofia ROS'a i podstawowe koncepty (wykład)](/lab1/README.md)
 - [Lab 2 - Package, topic, service, action](/lab2/README.md)
+- [Lab 3 - URDF, Gazebo, diff_drive_controller, teleop_twist_keyboard](/lab3/README.md)
 
 ## Zgłaszanie uwag
 
